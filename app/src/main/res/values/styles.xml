@@ -1,0 +1,42 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/colorAccent</item>-->
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
+
+<!--        <item name="android:windowLightStatusBar">true</item>-->
+<!--        <item name="android:statusBarColor">@android:color/white</item>-->
+<!--        <item name="android:navigationBarColor">@android:color/white</item>-->
+<!--        <item name="android:windowBackground">@android:color/white</item>-->
+        <item name="android:textColor">@color/black</item>
+        <item name="android:actionMenuTextColor">@color/black</item>
+
+        <!-- Active thumb color & Active track color(30% transparency) -->
+<!--        <item name="colorControlActivated">@color/colorPrimary</item>-->
+        <!-- Inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@android:color/darker_gray</item>
+        <!-- Inactive track color(30% transparency) -->
+        <item name="android:colorForeground">@android:color/darker_gray</item>
+
+    </style>
+
+    <style name="ClickRippleBack">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="ClickRippleFront">
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="ClickRippleFrontBorderless">
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="ViewPager" parent="AppTheme">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/white</item>
+    </style>
+
+
+</resources>
