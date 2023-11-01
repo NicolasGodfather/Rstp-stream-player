@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+// example statuses
+
+
 //OPTIONS rtsp://10.0.1.145:88/videoSub RTSP/1.0
 //CSeq: 1
 //User-Agent: Lavf58.29.100
@@ -566,18 +569,11 @@ public class RtspClient implements NetUtils.ErrorCallback {
         return tracks;
     }
 
-    // Pair first - name, e.g. "a"; second - value, e.g "cliprect:0,0,1920,1080"
     @NonNull
     private static List<Pair<String, String>> getDescribeParams(@NonNull String text) {
         ArrayList<Pair<String, String>> list = new ArrayList<>();
         boolean c = text.contains("\r\n");
-        //if(DEBUG) Log.d("getDescribeParams", "contains slash_R_slash_N = " + c);
         String[] params = TextUtils.split(text, (text.contains("\r\n")) ? "\r\n" : "\n"); // nico - we wait splitter "\n"
-//        String[] params = TextUtils.split(text, "\n");
-//        boolean c = text.contains("\r\n") ;
-////        Log.d("getDescribeParams", "contains = " + c); // todo here we wait splitter "\n"
-//        String[] params = TextUtils.split(text, (text.contains("\r\n")) ? "\r\n" : "\n");
-//        String[] params = TextUtils.split(text, "\n");
         for (String param : params) {
             int i = param.indexOf('=');
             if (i > 0) {
@@ -624,7 +620,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
         return sdpInfo;
     }
 
-    // a=fmtp:97 streamtype=5;profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3;config=1408
     @Nullable
     private static List<Pair<String, String>> getSdpAParams(@NonNull Pair<String, String> param) {
         if (param.first.equals("a") && param.second.startsWith("fmtp:")) { //
@@ -652,9 +647,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
     }
 
     private static void updateVideoTrackFromDescribeParam(@NonNull VideoTrack videoTrack, @NonNull Pair<String, String> param) {
-        // a=fmtp:96 packetization-mode=1;profile-level-id=42C028;sprop-parameter-sets=Z0LAKIyNQDwBEvLAPCIRqA==,aM48gA==;
-        // a=fmtp:96 packetization-mode=1; profile-level-id=4D4029; sprop-parameter-sets=Z01AKZpmBkCb8uAtQEBAQXpw,aO48gA==
-        // a=fmtp:99 sprop-parameter-sets=Z0LgKdoBQBbpuAgIMBA=,aM4ySA==;packetization-mode=1;profile-level-id=42e029
         List<Pair<String, String>> params = getSdpAParams(param);
         if (params != null) {
             for (Pair<String, String> pair : params) {
@@ -691,9 +683,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
     }
 
     private static void updateAudioTrackFromDescribeParam(@NonNull AudioTrack audioTrack, @NonNull Pair<String, String> param) {
-        // a=fmtp:96 streamtype=5; profile-level-id=14; mode=AAC-lbr; config=1388; sizeLength=6; indexLength=2; indexDeltaLength=2; constantDuration=1024; maxDisplacement=5
-        // a=fmtp:97 streamtype=5;profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3;config=1408
-        // a=fmtp:96 profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3;config=1210fff15081ffdffc
         List<Pair<String, String>> params = getSdpAParams(param);
         if (params != null) {
             for (Pair<String, String> pair : params) {
@@ -865,19 +854,8 @@ public class RtspClient implements NetUtils.ErrorCallback {
             md.update((byte) ':');
             md.update(nonce.getBytes(StandardCharsets.ISO_8859_1));
             md.update((byte) ':');
-            // TODO add support for more secure version of digest auth
-            //md.update(nc.getBytes(StandardCharsets.ISO_8859_1));
-            //md.update((byte) ':');
-            //md.update(cnonce.getBytes(StandardCharsets.ISO_8859_1));
-            //md.update((byte) ':');
-            //md.update(qop.getBytes(StandardCharsets.ISO_8859_1));
-            //md.update((byte) ':');
             md.update(getHexStringFromBytes(ha2).getBytes(StandardCharsets.ISO_8859_1));
             String response = getHexStringFromBytes(md.digest());
-
-//            log.trace("username=\"{}\", realm=\"{}\", nonce=\"{}\", uri=\"{}\", response=\"{}\"",
-//                    userName, digestRealm, digestNonce, digestUri, response);
-
             return "Digest username=\"" + username + "\", realm=\"" + realm + "\", nonce=\"" + nonce + "\", uri=\"" + digestUri + "\", response=\"" + response + "\"";
         } catch (Exception e) {
             e.printStackTrace();
@@ -892,43 +870,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
             buf.append(String.format("%02x", b));
         return buf.toString();
     }
-
-//v=0
-//o=- 1542237507365806 1542237507365806 IN IP4 10.0.1.111
-//s=Media Presentation
-//e=NONE
-//b=AS:50032
-//t=0 0
-//a=control:*
-//a=range:npt=0.000000-
-//m=video 0 RTP/AVP 96
-//c=IN IP4 0.0.0.0
-//b=AS:50000
-//a=framerate:25.0
-//a=transform:1.000000,0.000000,0.000000;0.000000,1.000000,0.000000;0.000000,0.000000,1.000000
-//a=control:trackID=1
-//a=rtpmap:96 H264/90000
-//a=fmtp:96 packetization-mode=1; profile-level-id=4D4029; sprop-parameter-sets=Z01AKZpmBkCb8uAtQEBAQXpw,aO48gA==
-//m=audio 0 RTP/AVP 97
-//c=IN IP4 0.0.0.0
-//b=AS:32
-//a=control:trackID=2
-//a=rtpmap:97 G726-32/8000
-
-// v=0
-// o=- 14190294250618174561 14190294250618174561 IN IP4 127.0.0.1
-// s=IP Webcam
-// c=IN IP4 0.0.0.0
-// t=0 0
-// a=range:npt=now-
-// a=control:*
-// m=video 0 RTP/AVP 96
-// a=rtpmap:96 H264/90000
-// a=control:h264
-// a=fmtp:96 packetization-mode=1;profile-level-id=42C028;sprop-parameter-sets=Z0LAKIyNQDwBEvLAPCIRqA==,aM48gA==;
-// a=cliprect:0,0,1920,1080
-// a=framerate:30.0
-// a=framesize:96 1080-1920
 
     @NonNull
     private static String readContentAsText(@NonNull InputStream inputStream, int length) throws IOException {
@@ -1018,7 +959,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
         uriRtsp = builder.uriRtsp;
         exitFlag = builder.exitFlag;
         listener = builder.listener;
-//      sendOptionsCommand = builder.sendOptionsCommand;
         requestVideo = builder.requestVideo;
         requestAudio = builder.requestAudio;
         username = builder.username;
@@ -1047,42 +987,13 @@ public class RtspClient implements NetUtils.ErrorCallback {
         outputStream.flush();
     }
 
-    public void pause() {
-        try {
-            // ... (код для получения всех необходимых параметров, таких как request, cSeq, userAgent, authToken и session)
-            sendPauseCommand(outputStream, uriRtsp, cSeq.get(), userAgent, authToken, session);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void play()
-            throws IOException {
-        try {
-            sendPlayCommand(outputStream, uriRtsp, cSeq.get(), userAgent, authToken, session);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void execute() {
         if (DEBUG)
             Log.d(TAG, "execute()");
         listener.onRtspConnecting();
         try {
             final InputStream inputStream = rtspSocket.getInputStream();
-
-
             ArrayList<Pair<String, String>> headers;
-
-// OPTIONS rtsp://10.0.1.78:8080/video/h264 RTSP/1.0
-// CSeq: 1
-// User-Agent: Lavf58.29.100
-
-// RTSP/1.0 200 OK
-// CSeq: 1
-// Public: OPTIONS, DESCRIBE, SETUP, PLAY, GET_PARAMETER, SET_PARAMETER, TEARDOWN
-//          if (sendOptionsCommand) {
             checkExitFlag(exitFlag);
             sendOptionsCommand(outputStream, uriRtsp, cSeq.addAndGet(1), userAgent, null);
             status = readResponseStatusCode(inputStream);
@@ -1113,28 +1024,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
             checkStatusCode(status, listener);
             final int capabilities = getSupportedCapabilities(headers);
 
-
-// DESCRIBE rtsp://10.0.1.78:8080/video/h264 RTSP/1.0
-// Accept: application/sdp
-// CSeq: 2
-// User-Agent: Lavf58.29.100
-
-// RTSP/1.0 200 OK
-// CSeq: 2
-// Content-Type: application/sdp
-// Content-Length: 364
-//
-// v=0
-// t=0 0
-// a=range:npt=now-
-// m=video 0 RTP/AVP 96
-// a=rtpmap:96 H264/90000
-// a=fmtp:96 packetization-mode=1;sprop-parameter-sets=Z0KAH9oBABhpSCgwMDaFCag=,aM4G4g==
-// a=control:trackID=1
-// m=audio 0 RTP/AVP 96
-// a=rtpmap:96 mpeg4-generic/48000/1
-// a=fmtp:96 profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3;config=1188
-// a=control:trackID=2
             checkExitFlag(exitFlag);
 
             sendDescribeCommand(outputStream, uriRtsp, cSeq.addAndGet(1), userAgent, authToken);
@@ -1186,16 +1075,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
                 }
             }
 
-
-// SETUP rtsp://10.0.1.78:8080/video/h264/trackID=1 RTSP/1.0
-// Transport: RTP/AVP/TCP;unicast;interleaved=0-1
-// CSeq: 3
-// User-Agent: Lavf58.29.100
-
-// RTSP/1.0 200 OK
-// CSeq: 3
-// Transport: RTP/AVP/TCP;unicast;interleaved=0-1
-// Session: Mzk5MzY2MzUwMTg3NTc2Mzc5NQ;timeout=30
             int sessionTimeout = 0;
             for (int i = 0; i < 2; i++) {
                 // i=0 - video track, i=1 - audio track
@@ -1366,8 +1245,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
         while (!exitFlag.get() && readUntilBytesFound(inputStream, rtspHeader) && (line = readLine(inputStream)) != null) {
             if (debug)
                 Log.d(TAG_DEBUG, "" + line);
-//            int indexRtsp = line.indexOf("TSP/1.0 "); // 8 characters, 'R' already found
-//            if (indexRtsp >= 0) {
             int indexCode = line.indexOf(' ');
             String code = line.substring(0, indexCode);
             try {
@@ -1379,7 +1256,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
                 // Does not fulfill standard "RTSP/1.1 200 OK" token
                 // Continue search for
             }
-//            }
         }
         if (debug)
             Log.d(TAG_DEBUG, "Could not obtain status code");
@@ -1441,8 +1317,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
             // Read 1 byte
             readBytes = inputStream.read(bufferLine, offset, 1);
             if (readBytes == 1) {
-//////                if (DEBUG) Log.d(TAG, "bufferLine[]=" + bufferLine[offset] );
-
                 // if (offset > 0 && /*(bufferLine[offset-1] == '\r\n' &&*/ (bufferLine[offset] == '\n' || bufferLine[offset] == '\r'|| bufferLine[offset] == ' ' || bufferLine[offset-1] == '\r')) {
 
                 // Check for EOL
@@ -1504,54 +1378,7 @@ public class RtspClient implements NetUtils.ErrorCallback {
     public abstract static class Track {
         public String request;
         public int payloadType;
-//
-//        public final int type;
-//        public final String codec;
-//        public final String originalCodec;
-//        public final int fourcc;
-//        public final int id;
-//        public final int profile;
-//        public final int level;
-//        public final int bitrate;
-//        public final String language;
-//        public final String description;
-//
-//        public static class Type {
-//            public static final int Unknown = -1;
-//            public static final int Audio = 0;
-//            public static final int Video = 1;
-//            public static final int Text = 2;
-//        }
-//
-//        protected Track(int type, String codec, String originalCodec, int fourcc, int id, int profile,
-//                        int level, int bitrate, String language, String description) {
-//            this.type = type;
-//            this.codec = codec;
-//            this.originalCodec = originalCodec;
-//            this.fourcc = fourcc;
-//            this.id = id;
-//            this.profile = profile;
-//            this.level = level;
-//            this.bitrate = bitrate;
-//            this.language = language;
-//            this.description = description;
-//        }
-
     }
-
-//    private boolean readUntilByteFound(@NonNull InputStream inputStream, byte bt) throws IOException {
-//        byte[] buffer = new byte[1];
-//        int readBytes;
-//        while (!exitFlag.get()) {
-//            readBytes = inputStream.read(buffer, 0, 1);
-//            if (readBytes == -1) // EOF
-//                return false;
-//            if (readBytes == 1 && buffer[0] == bt) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     public static class VideoTrack extends Track {
         public int videoCodec = VIDEO_CODEC_H264;
@@ -1623,12 +1450,6 @@ public class RtspClient implements NetUtils.ErrorCallback {
             return this;
         }
 
-//        @NonNull
-//        public Builder sendOptionsCommand(boolean sendOptionsCommand) {
-//            this.sendOptionsCommand = sendOptionsCommand;
-//            return this;
-//        }
-
         @NonNull
         public Builder requestVideo(boolean requestVideo) {
             this.requestVideo = requestVideo;
@@ -1662,34 +1483,5 @@ class LoggerOutputStream extends BufferedOutputStream {
     @Override
     public synchronized void write(byte[] b, int off, int len) throws IOException {
         super.write(b, off, len);
-//        if (logging)
-        //Log.d(RtspClient.TAG_DEBUG, new String(b, off, len));
     }
 }
-
-
-/*
-
-Статус ответа 453 в контексте RTSP (Real Time Streaming Protocol) обычно означает "Not Enough Bandwidth".
-Это сообщение об ошибке указывает на то, что сервер не может обрабатывать запрос из-за нехватки пропускной способности.
-
-Вот несколько возможных причин:
-Сервер перегружен: Если сервер, который вы используете для потоковой передачи, обрабатывает слишком много запросов, он может не иметь достаточной пропускной способности для обработки вашего запроса.
-Сетевые ограничения: Ваш сетевой провайдер может ограничивать пропускную способность, что может привести к ошибке 453.
-Ограничения на стороне клиента: Ваше устройство или приложение могут иметь ограничения на количество одновременных потоков или общую пропускную способность.
-
-Для решения этой проблемы вам, возможно, придется обратиться к своему провайдеру услуг или администратору сети,
-или вам может потребоваться настроить свое устройство или приложение, чтобы они могли обрабатывать больший объем данных.
-Если проблема возникает на стороне сервера, вам может потребоваться увеличить пропускную способность сервера или уменьшить нагрузку на него.
-
-*/
-
-//java.net.SocketException: Connection reset
-//        W  	at java.net.SocketInputStream.read(SocketInputStream.java:156)
-//        W  	at java.net.SocketInputStream.read(SocketInputStream.java:143)
-//        W  	at com.example.rtsp.NetUtils.readData(NetUtils.java:87)
-//        W  	at com.example.rtsp.RtpParser.readHeader(RtpParser.java:25)
-//        W  	at com.example.rtsp.RtspClient.readRtpData(RtspClient.java:241)
-//        W  	at com.example.rtsp.RtspClient.execute(RtspClient.java:1268)
-//        W  	at com.naveksoft.vms.player.rtsp.RtspThread.run(RtspThread.kt:292)
-//        W

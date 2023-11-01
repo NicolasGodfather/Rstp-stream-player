@@ -48,23 +48,19 @@ public class ZoomableTextureView extends TextureView {
         super(context);
         this.context = context;
         initView(null);
-//        initCallback(context);
     }
 
     public ZoomableTextureView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         initView(attrs);
-//        initCallback(context);
     }
 
     public ZoomableTextureView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.context = context;
         initView(attrs);
-//        initCallback(context);
     }
-
 
     public void setMinScale(float scale) {
         if (scale < 1.0f || scale > maxScale)
@@ -229,11 +225,6 @@ public class ZoomableTextureView extends TextureView {
                     float diffX = e2.getX() - e1.getX();
                     if (Math.abs(diffX) > Math.abs(diffY)) {
                         if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                            if (diffX > 0) {
-//                                pageCallback.onSwipeRight();
-//                            } else {
-//                                pageCallback.onSwipeLeft();
-                            }
                             result = true;
                         }
                     }

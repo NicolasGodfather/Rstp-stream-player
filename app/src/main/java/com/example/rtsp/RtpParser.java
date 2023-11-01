@@ -3,7 +3,6 @@ package com.example.rtsp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 

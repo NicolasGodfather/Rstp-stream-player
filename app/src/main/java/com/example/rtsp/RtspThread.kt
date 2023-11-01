@@ -43,20 +43,6 @@ class RtspThread(
 		}
 	var counterError = 0
 	var rtspStopped: AtomicBoolean = AtomicBoolean(false)
-//	var rtspClient: RtspClient? = null
-//
-//	 now pausing/playing doesn't support on ms
-//	fun pauseDecoding() {
-//		rtspClient?.pause()
-//		videoDecodeThread?.pauseDecoding()
-//		audioDecodeThread?.pauseDecoding()
-//	}
-//   now pausing/playing doesn't support on ms
-//	fun resumeDecoding() {
-//		rtspClient?.play()
-//		videoDecodeThread?.resumeDecoding()
-//		audioDecodeThread?.resumeDecoding()
-//	}
 
 	private val proxyClientListener = object: RtspClient.RtspClientListener {
 		override fun onRtspDisconnected() {
@@ -163,10 +149,8 @@ class RtspThread(
 
 	fun onRtspClientReleased() {
 		rtspStopped.set(true)
-//		surface = null
 		stopDecoders()
 		Log.d("RtspThread", "onRtspClientReleased() - stop RTSP")
-//		// Wake up sleep() code
 		interrupt()
 	}
 

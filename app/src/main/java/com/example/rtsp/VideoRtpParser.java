@@ -5,9 +5,6 @@ import androidx.annotation.Nullable;
 
 class VideoRtpParser {
 
-    private static final String TAG = VideoRtpParser.class.getSimpleName();
-    private static final boolean DEBUG = false;
-
     private final static int NAL_UNIT_TYPE_STAP_A = 24;
     private final static int NAL_UNIT_TYPE_STAP_B = 25;
     private final static int NAL_UNIT_TYPE_MTAP16 = 26;

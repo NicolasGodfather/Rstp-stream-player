@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.text.*
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.EditorInfo
 import android.widget.*
-import android.widget.TextView.OnEditorActionListener
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rtsp.*
 

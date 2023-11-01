@@ -23,7 +23,6 @@ public class AacParser {
     // Number of bits for AAC AU index(-delta), indexed by mode (LBR and HBR)
     private static final int[] NUM_BITS_AU_INDEX = {2, 3};
     // Frame Sizes for AAC AU fragments, indexed by mode (LBR and HBR)
-    private static final int[] FRAME_SIZES = {63, 8191};
     private final ParsableBitArray headerScratchBits;
     private final ParsableByteArray headerScratchBytes;
     private final int _aacMode;

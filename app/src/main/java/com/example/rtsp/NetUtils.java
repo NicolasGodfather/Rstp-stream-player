@@ -19,10 +19,6 @@ import javax.net.ssl.X509TrustManager;
 
 public class NetUtils {
 
-    private static final String TAG = "RtspThread";
-    private static final boolean DEBUG = false;
-    private final static int MAX_LINE_SIZE = 4098 / 2;
-
     @NonNull
     public static SSLSocket createSslSocketAndConnect(@NonNull String dstName, int dstPort, int timeout) throws Exception {
 //        if (DEBUG)
@@ -71,13 +67,6 @@ public class NetUtils {
             socket.close();
         }
     }
-
-//System.err: java.net.UnknownHostException: null
-//System.err:     at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:208)
-//System.err:     at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:436)
-//System.err:     at java.net.Socket.connect(Socket.java:621)
-//System.err:     at by.beltelecom.cctv.ui.player.rtsp.utils.NetUtils.createSocketAndConnect(NetUtils.java:98)
-//System.err:     at by.beltelecom.cctv.ui.player.rtsp.RtspThread.run(RtspThread.kt:221)
 
     public static int readData(@NonNull InputStream inputStream, @NonNull byte[] buffer, int offset, int length) throws IOException {
         int readBytes;

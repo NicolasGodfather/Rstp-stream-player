@@ -1,7 +1,5 @@
 package com.example.rtsp
 
-import android.view.Surface
-
 abstract class PlayerProtocol {
 
 	enum class PlaybackState(val state: Int) {
