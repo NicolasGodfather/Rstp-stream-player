@@ -20,6 +20,7 @@ class MainActivity: AppCompatActivity(), TextureView.SurfaceTextureListener {
 	lateinit var edtUrl: EditText
 	lateinit var tvButton: TextView
 	lateinit var surfaceViewVideo: TextureView
+	lateinit var progressBar: ProgressBar
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -29,6 +30,7 @@ class MainActivity: AppCompatActivity(), TextureView.SurfaceTextureListener {
 		surfaceViewVideo = findViewById(R.id.surfaceViewVideo)
 		edtUrl = findViewById(R.id.edtUrl)
 		tvButton = findViewById(R.id.tvButton)
+		progressBar = findViewById(R.id.progressBar)
 		surfaceViewVideo.surfaceTextureListener = this
 
 		edtUrl.addTextChangedListener(object: TextWatcher {
@@ -38,14 +40,6 @@ class MainActivity: AppCompatActivity(), TextureView.SurfaceTextureListener {
 				url = s.toString()
 				Log.d("afterTextChanged", "url = $url")
 			}
-		})
-
-		edtUrl.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
-			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				startStream()
-				return@OnEditorActionListener true
-			}
-			false
 		})
 		edtUrl.setText(url)
 
@@ -63,6 +57,7 @@ class MainActivity: AppCompatActivity(), TextureView.SurfaceTextureListener {
 	private fun startStream() {
 		if (url.isEmpty()) return
 
+		progressBar.visibility = View.VISIBLE
 		if (surface != null && rtspThread == null && url.isNotEmpty()) {
 			Log.d("LOGS", "onSurfaceTextureAvailable showVideo url = $url")
 			rtspThread = RtspThread(this, {
@@ -71,6 +66,10 @@ class MainActivity: AppCompatActivity(), TextureView.SurfaceTextureListener {
 				startStream()
 			}, { it1, it2 ->
 				// handle states, errors
+				runOnUiThread {
+					progressBar.visibility = View.GONE
+					surfaceViewVideo.visibility = View.VISIBLE
+				}
 			}, {
 				// show empty screen
 			})
@@ -85,8 +84,8 @@ class MainActivity: AppCompatActivity(), TextureView.SurfaceTextureListener {
 	private fun stopStream() {
 		rtspThread?.onRtspClientReleased()
 		rtspThread = null
-		surface?.release()
-		surface = null
+		surfaceViewVideo.visibility = View.GONE
+		progressBar.visibility = View.GONE
 	}
 
 	override fun onSurfaceTextureAvailable(texture: SurfaceTexture, width: Int, height: Int) {
